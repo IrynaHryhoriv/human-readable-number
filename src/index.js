@@ -2,37 +2,6 @@ module.exports = function toReadable (number) {
    
 }
 
-/* 
-toReadable(1); // Will return 'one'
-toReadable(997); //will return 'nine hundred ninety seven'
-*/
-
-/* 
-1 - 13 - one, two, three, four, six, seven, eigth, nine, ten, eleven, twelve, thirteen
-
-14 - 19 - fourteen fifteen sixteen seventeen eighteen nineteen 
-
-20 - twenty
-
-30 - thirty
-
-40 - forty
-
-50 - fifty
-
-60 - sixty
-
-70 - seventy
-
-80 - eighty
-
-90 - ninety
-
-100 - one hundred
-
-997 - nine hundred ninety seven
-*/
-
 function toReadable(num) {
     let result;
   
