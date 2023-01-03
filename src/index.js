@@ -1,116 +1,75 @@
-module.exports = function toReadable (number) {
-   
+module.exports = function toReadable(number) {
+  return parseNumberToWords(number);
+};
+
+
+const NS = [
+  {value: 1000000, str: "million"},
+  {value: 1000, str: "thousand"},
+  {value: 100, str: "hundred"},
+  {value: 90, str: "ninety"},
+  {value: 80, str: "eighty"},
+  {value: 70, str: "seventy"},
+  {value: 60, str: "sixty"},
+  {value: 50, str: "fifty"},
+  {value: 40, str: "forty"},
+  {value: 30, str: "thirty"},
+  {value: 20, str: "twenty"},
+  {value: 19, str: "nineteen"},
+  {value: 18, str: "eighteen"},
+  {value: 17, str: "seventeen"},
+  {value: 16, str: "sixteen"},
+  {value: 15, str: "fifteen"},
+  {value: 14, str: "fourteen"},
+  {value: 13, str: "thirteen"},
+  {value: 12, str: "twelve"},
+  {value: 11, str: "eleven"},
+  {value: 10, str: "ten"},
+  {value: 9, str: "nine"},
+  {value: 8, str: "eight"},
+  {value: 7, str: "seven"},
+  {value: 6, str: "six"},
+  {value: 5, str: "five"},
+  {value: 4, str: "four"},
+  {value: 3, str: "three"},
+  {value: 2, str: "two"},
+  {value: 1, str: "one"}
+];
+
+function parseNumberToWords(number) {
+  if (number === 0) {
+    return "zero"
+  }
+  else {
+    return parse(number);
+  }
 }
 
-function toReadable(num) {
-    let result;
-  
-    // check num is number
-    if (isNaN(+num)) {
-      return "Argument must be a number";
-    }
-  
-    // if 0
-    if (num === 0) {
-      result = "zero";
-    }
-  
-    const preDecimal = {
-      1: "one",
-      2: "two",
-      3: "three",
-      4: "four",
-      5: "five",
-      6: "six",
-      7: "seven",
-      8: "eight",
-      9: "nine",
-      10: "ten",
-      11: "eleven",
-      12: "twelve",
-      13: "thirteen",
-      14: "fourteen",
-      15: "fifteen",
-      16: "sixteen",
-      17: "seventeen",
-      18: "eighteen",
-      19: "nineteen"
-    };
-  
-    const another = {
-      0: "ten",
-      1: "eleven",
-      2: "twelve",
-      3: "thirteen",
-      4: "fourteen",
-      5: "fifteen",
-      6: "sixteen",
-      7: "seventeen",
-      8: "eighteen",
-      9: "nineteen"
-    };
-  
-    const decimal = {
-      1:"", 
-      2: "twenty",
-      3: "thirty",
-      4: "forty",
-      5: "fifty",
-      6: "sixty",
-      7: "seventy",
-      8: "eighty",
-      9: "ninety"
-    };
-    // if less then 20
-    if (num > 0 && num < 20) {
-      result = preDecimal[num];
-    }
-    // if more then 20
-    if (num >= 20 && num < 100) {
 
-      const numStr = num.toString();
-  
-      // if second number === 0
-      if (+numStr[1] === 0) {
+function parse(number) {
+  var result = '';
 
-        result = decimal[+numStr[0]];
-
-      } else {
-
-        result = `${decimal[numStr[0]]} ${preDecimal[+numStr[1]]}`;
+  for (var n of NS) {
+    if (number >= n.value){
+      if (number <= 99) {
+        result += n.str;
+        number -= n.value;
+        if (number > 0) {
+          result += ' ';
+        }
+      }
+      else {
+        var t =  Math.floor(number / n.value);
+        var d = number % n.value;
+        if ( d > 0 ) {
+          return parse(t) + ' ' + n.str +' ' + parse(d);
+        }
+        else {
+          return parse(t) + ' ' + n.str;
+        }
       }
     }
-  
-    // if 100 and more
-    if (num >= 100) {
-
-      const numStr = num.toString();
-      const firstIndex = +numStr[0];
-      const middleIndex = +numStr[1];
-      const lastIndex = +numStr[2];
-  
-      if (middleIndex === 0) {
-
-        result = `${preDecimal[firstIndex]} hundred`;
-
-        result += ` ${preDecimal[lastIndex] ? preDecimal[lastIndex] : ""}`;
-
-      } else {
-
-        result = `${preDecimal[firstIndex]} hundred`;
-
-        result += ` ${
-          decimal[middleIndex] && lastIndex === 0
-            ? decimal[middleIndex]
-            : decimal[middleIndex]
-        }`;
-        
-        result += ` ${preDecimal[lastIndex] ? preDecimal[lastIndex] : ""}`;
-      } 
-    }
-  
-    return result;
   }
-  
-  console.log(toReadable(1));
-  console.log(toReadable(997));
+
+  return result;
+}
